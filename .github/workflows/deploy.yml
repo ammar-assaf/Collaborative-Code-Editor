@@ -14,11 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install Docker Compose
-        run: |
-            sudo curl -L "https://github.com/docker/compose/releases/download/v2.17.1/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
-            sudo chmod +x /usr/local/bin/docker-compose
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -34,15 +29,6 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/frontend:latest -f frontend/Dockerfile ./frontend
           docker push ${{ secrets.DOCKER_USERNAME }}/frontend:latest
-
-      - name: Deploy with Docker Compose
-        run: |
-          docker-compose up -d
-        env:
-          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-          GITHUB_CLIENT_ID: ${{ secrets.CLIENT_ID_GITHUB }}
-          GITHUB_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET_GITHUB }}
 
       - name: Cleanup Docker
         run: docker system prune -f
