@@ -16,7 +16,6 @@ jobs:
     services:
       mysql:
         image: mysql:latest
-        container_name: mysql
         ports:
           - 3306:3306
         env:
@@ -45,7 +44,7 @@ jobs:
 
       - name: Build with Maven
         env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${{ secrets.MYSQL_DATABASE }}
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/${{ secrets.MYSQL_DATABASE }}
           SPRING_DATASOURCE_USERNAME: ${{ secrets.MYSQL_USER }}
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
@@ -56,7 +55,7 @@ jobs:
 
       - name: Run Tests
         env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${{ secrets.MYSQL_DATABASE }}
+          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/${{ secrets.MYSQL_DATABASE }}
           SPRING_DATASOURCE_USERNAME: ${{ secrets.MYSQL_USER }}
           SPRING_DATASOURCE_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
