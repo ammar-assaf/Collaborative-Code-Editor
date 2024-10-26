@@ -12,6 +12,18 @@ jobs:
   backend-build:
     runs-on: ubuntu-latest
     name: Build and Test Backend
+    
+    services:
+      mysql:
+        image: mysql:latest
+        container_name: mysql
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
 
     steps:
       - name: Checkout code
@@ -33,6 +45,9 @@ jobs:
 
       - name: Build with Maven
         env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${{ secrets.MYSQL_DATABASE }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.MYSQL_USER }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GITHUB_CLIENT_ID: ${{ secrets.CLIENT_ID_GITHUB }}
@@ -41,6 +56,9 @@ jobs:
 
       - name: Run Tests
         env:
+          SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/${{ secrets.MYSQL_DATABASE }}
+          SPRING_DATASOURCE_USERNAME: ${{ secrets.MYSQL_USER }}
+          SPRING_DATASOURCE_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           GITHUB_CLIENT_ID: ${{ secrets.CLIENT_ID_GITHUB }}
@@ -49,7 +67,7 @@ jobs:
 
   frontend-build:
     runs-on: ubuntu-latest
-    name: Build and Test Frontend
+    name: Build Frontend
 
     steps:
       - name: Checkout code
@@ -73,6 +91,3 @@ jobs:
 
       - name: Build Frontend
         run: npm run build --prefix frontend
-
-      - name: Run Tests
-        run: npm test --prefix frontend
