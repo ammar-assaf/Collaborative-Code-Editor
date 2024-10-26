@@ -16,9 +16,8 @@ jobs:
 
       - name: Install Docker Compose
         run: |
-          VERSION=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r .tag_name)
-          sudo curl -L "https://github.com/docker/compose/releases/${VERSION}/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
+            sudo curl -L "https://github.com/docker/compose/releases/download/v2.17.1/docker-compose-linux-x86_64" -o /usr/local/bin/docker-compose
+            sudo chmod +x /usr/local/bin/docker-compose
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
